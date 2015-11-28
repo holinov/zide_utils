@@ -1,0 +1,9 @@
+#!/bin/bash
+
+PANES=`tmux list-panes| awk '{print $7}'`
+
+for PANE in $PANES; do
+	if [ ! $PANE == $TMUX_PANE ]; then
+		tmux send-keys -t $PANE "cd `pwd`" C-m
+	fi
+done

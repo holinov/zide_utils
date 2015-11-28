@@ -1,0 +1,8 @@
+#!/bin/bash
+
+PANE=$1
+if [ -z $PANE ];then 
+	PANE=1
+fi
+
+tmux send-keys -t $PANE "cd `pwd`" C-m

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+HOST=$1
+shift
+TASK="$@"
+
+if [ -z $HOST ]; then
+HOST="c01"
+fi
+
+if [ -z "$TASK" ]; then
+TASK='-r ring'
+fi
+
+ssh "$HOST" "/usr/local/cassandra/bin/nodetool $TASK"

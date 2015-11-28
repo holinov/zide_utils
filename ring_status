@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ring_cmd c01 -r ring PixAPI
