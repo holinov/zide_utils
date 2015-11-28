@@ -1,0 +1,15 @@
+#!/bin/bash
+
+WINDOWS=`tmux list-windows | awk '{print $8}'`
+
+for wnd in $WINDOWS; do
+	tmux select-window -t "$wnd"
+	PANES=`tmux list-panes| awk '{print $7}'`
+
+	for PANE in $PANES; do
+		if [ ! $PANE == $TMUX_PANE ]; then
+			tmux respawn-pane -k -t "$PANE"
+		fi
+	done
+done
+tmux select-window -t 1
