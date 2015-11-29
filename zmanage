@@ -1,0 +1,52 @@
+#!/bin/bash
+##########################
+## Script: 	zIDE managment script
+## Author: 	kholinow
+## Created: 	2015-11-29
+##########################
+
+
+function install_feature() {
+FEATURES=`curl -s "https://raw.githubusercontent.com/ervandew/eclim/master/org.eclim.installer/build/resources/dependencies.xml" | grep "dependency id" | awk -F\" '{print $2}'`
+
+select FEATURE in $FEATURES;
+do
+	FEATURE_GROUP="$FEATURE.feature.group"
+	echo "Installing feature $FEATURE_GROUP"
+	echo DISPLAY=:1 "$HOME/eclipse/eclipse" -nosplash -consolelog -debug -application org.eclipse.equinox.p2.director -repository http://download.eclipse.org/releases/juno -installIU "$FEATURE_GROUP"
+	break
+done
+}
+
+function run_server() {
+echo "run server"
+DISPLAY=:1 $HOME/eclipse/eclimd -b
+}
+
+function run_vxfb() {
+echo "run vxfb"
+Xvfb :1 -screen 0 1024x768x24 &
+}
+
+function print_help() {
+	echo Params
+	echo feature, server, vxfb
+}
+
+if [[ -z $1 ]]; then
+	print_help
+fi
+
+ACTION=$1
+shift
+
+case $ACTION in
+	feature|f ) install_feature $@
+		;;
+	server|s ) run_server $@
+		;;
+	vxfb|x ) run_vxfb $@
+		;;
+	* ) print_help
+		;;
+esac
