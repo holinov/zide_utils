@@ -1,0 +1,14 @@
+#!/bin/bash
+##########################
+## Script: 	Prints system and usage info on cassandra ring cXX
+## Author: 	kholinow
+## Created: 	2015-11-29
+##########################
+source "zide-config.cfg"
+echo 'v: version, s: disk size, u: disk space used, a: disk space available, us: dis usage (%)'
+for i in ${CASSANDRA_RING[@]}; 
+do
+	USAGE=`ssh "$i" df -h "$CASSANDRA_DATADRIVE" | grep "/dev/" | awk '{print "s: " $2 " u: " $3 " a: " $4 " us: " $5 }'`
+	VERSION=`ssh "$i" "hostname;$CASSANDRA_HOME/nodetool version" | xargs -n 3 | awk '{print $1 " v: " $3}'`
+	echo "$VERSION $USAGE"
+done
